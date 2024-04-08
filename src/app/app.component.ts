@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {transition, trigger, useAnimation} from "@angular/animations";
-import {pulse, shakeX, wobble} from "ng-animate";
+import {bounce, flip, pulse, shakeX, wobble} from "ng-animate";
+import {lastValueFrom, timer} from "rxjs";
 
 let DEATH_DURATION_SECONDS = 0.5;
 
@@ -12,6 +13,8 @@ let DEATH_DURATION_SECONDS = 0.5;
     trigger('death', [transition(':increment', useAnimation(shakeX, {params: {timing: DEATH_DURATION_SECONDS}}))]),
     trigger('charge', [transition(':increment', useAnimation(pulse, {params: {timing: 0.9, scale:0.5}}))]),
     trigger('attack', [transition(':increment', useAnimation(pulse, {params: {timing: 0.3, scale:4.5}}))]),
+    trigger('bounce',[transition(':increment', useAnimation(bounce, {params: {timing: 1}}))]),
+    trigger('flip',[transition(':increment', useAnimation(flip, {params: {timing: 0.75}}))]),
   ]
 })
 export class AppComponent {
@@ -19,7 +22,11 @@ export class AppComponent {
   ng_death: any = 0;
   ng_attack: any = 0;
   ng_charge: any = 0;
-  wob = false
+  ng_bounce: any = 0;
+  ng_flip: any = 0;
+  wob = false;
+  rotateCenter: boolean = false;
+  rotateHorTop: boolean = false;
 
   constructor() {
   }
@@ -64,6 +71,39 @@ export class AppComponent {
     element?.classList.add("fadeOut");
   }
 
+  infiniteFlip(){
+    this.playCenter()
+  }
+
+  playCenter(){
+    this.rotateCenter = true;
+    setTimeout(()=>{
+      this.rotateCenter = false;
+      this.playHorTop();
+    },800)
+  }
+
+  playHorTop(){
+    this.rotateHorTop = true;
+    setTimeout(()=>{
+      this.rotateHorTop = false;
+      this.playCenter();
+    },700)
+  }
+
+  async bounceShakeFlip(){
+    this.ng_bounce++;
+    await this.waitFor(1);
+    this.ng_death++;
+    await this.waitFor(0.75);
+    this.ng_flip++;
+  }
+
+  async waitFor(delayInSeconds:number) {
+    await lastValueFrom(timer(delayInSeconds * 1000));
+  }
+
 
   protected readonly wobble = wobble;
+  protected readonly bounce = bounce;
 }

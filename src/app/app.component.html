@@ -1,7 +1,7 @@
 <div style="">
   <img width="800" style="position: relative; " src="../assets/background.png"/>
-  <div [class.wobble-hor-bottom]="wob" style="width: fit-content; position: absolute; top: 250px; left: 350px;">
-    <img  [@charge]="ng_charge" [@death]="ng_death" [@attack]="ng_attack" id="slimeyId" class="slime" width="150" src="../assets/slimeyWithBorder.png"/>
+  <div [class.wobble-hor-bottom]="wob" [class.rotate-center]="rotateCenter" [class.rotate-hor-top]="rotateHorTop" style="width: fit-content; position: absolute; top: 250px; left: 350px;">
+    <img  [@charge]="ng_charge" [@death]="ng_death" [@attack]="ng_attack" [@bounce]="ng_bounce" [@flip]="ng_flip" id="slimeyId" class="slime" width="150" src="../assets/slimeyWithBorder.png"/>
   </div>
 </div>
 <div style="padding: 20px">
@@ -9,4 +9,6 @@
   <button *ngIf="slimeIsPresent" mat-raised-button color="accent" (click)="death()">Death</button>
   <button *ngIf="slimeIsPresent" mat-raised-button color="accent" (click)="attack()">Attack</button>
   <button *ngIf="slimeIsPresent" mat-raised-button color="accent" (click)="hit()">Hit</button>
+  <button *ngIf="slimeIsPresent" mat-raised-button color="accent" (click)="bounceShakeFlip()">Bounce/Shake/Flip</button>
+  <button *ngIf="slimeIsPresent" mat-raised-button color="accent" (click)="infiniteFlip()">Infinite Triple Spin</button>
 </div>
